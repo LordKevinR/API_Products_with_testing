@@ -1,9 +1,17 @@
-import request from "supertest";
-import server from "../server.js";
+import { connectDB } from "../server";
+import db from "../config/db";
 
-describe("GET /api/products", () => {
-  it("should send back a json response", async () => {
-    const res = await request(server).get("/api/products");
-    console.log(res);
+jest.mock("../config/db");
+
+describe("connectDB", () => {
+  it("should handler database connection error", async () => {
+    jest
+      .spyOn(db, "authenticate")
+      .mockRejectedValueOnce(new Error("Database connection error"));
+    const consoleSpy = jest.spyOn(console, "log");
+    await connectDB();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining("Database connection error")
+    );
   });
 });

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec npx tsx src/index.ts",
-    "test": "jest"
+    "test": "jest --detectOpenHandles",
+    "test:coverage": "npm run pretest && jest --detectOpenHandles --coverage",
+    "pretest": "tsx ./src/data --clear"
   },
   "author": "Kevin Sanchez",
   "license": "ISC",

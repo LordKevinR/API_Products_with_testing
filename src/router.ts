@@ -6,9 +6,9 @@ import {
   getProductById,
   updateAvailability,
   updateProduct,
-} from "./handlers/product.handler.js";
+} from "./handlers/product.handler";
 import { body, param } from "express-validator";
-import { handleInputErrors } from "./middleware/index.js";
+import { handleInputErrors } from "./middleware/index";
 
 const router = Router();
 //routing
@@ -41,6 +41,14 @@ router.post(
 router.put(
   "/:id",
   param("id").isInt().withMessage("Invalid Id"),
+  body("name").notEmpty().withMessage("Name is required"),
+  body("price")
+    .notEmpty()
+    .withMessage("Price is required")
+    .isNumeric()
+    .withMessage("Price has to be a number")
+    .custom((value) => value > 0)
+    .withMessage("Price has to be greater than 0"),
   handleInputErrors,
   updateProduct
 );
